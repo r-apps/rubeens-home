@@ -6,4 +6,6 @@
     <string name="urlHeading">Server-URL</string>
     <string name="labelSearchServer">Enter address of the server</string>
     <string name="headingSettings">Settings</string>
+    <string name="labelPortServer">Port</string>
+    <string name="test_connection">Test connection</string>
 </resources>

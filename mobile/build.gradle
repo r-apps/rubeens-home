@@ -33,4 +33,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     wearApp project(':wear')
     implementation 'com.google.android.gms:play-services-wearable:+'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.7'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
 }

@@ -27,16 +27,22 @@
         android:layout_above="@+id/navigation"
         android:layout_alignTop="@id/navigation"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="0dp"></android.support.v7.widget.RecyclerView>
+        android:layout_marginBottom="0dp" />
+
+    <ProgressBar
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Large"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
 
     <RelativeLayout
         android:id="@+id/settings_container"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/navigation"
         android:layout_alignTop="@id/navigation"
-        android:layout_alignParentTop="true">
+        android:layout_alignParentTop="true"
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/labelUrlSearch"
@@ -59,6 +65,34 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/input_search_server"
             android:max="255" />
+
+        <TextView
+            android:id="@+id/labelUrlPort"
+            style="@style/TextAppearance.MaterialComponents.Overline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/search_urlprogressBar"
+            android:text="@string/labelPortServer" />
+
+        <NumberPicker
+            android:id="@+id/portPicker"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/labelUrlPort" />
+
+        <Button
+            android:id="@+id/connectionToServerTest"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/portPicker"
+            android:text="@string/test_connection" />
+
+        <Button
+            android:id="@+id/downloadAllLightsFromServerBtn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/connectionToServerTest"
+            android:text="Load all Lights from server"/>
     </RelativeLayout>
 
 </RelativeLayout>
