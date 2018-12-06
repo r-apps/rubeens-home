@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
@@ -27,7 +28,7 @@ import me.rubeen.apps.android.rubeenshome.entities.LightEntity;
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LightEntityViewHolder> {
 
     final List<LightEntity> lightEntities;
-    Context context;
+    private Context context;
 
     public RVAdapter(final List<LightEntity> lightEntities, Context context) {
         this.lightEntities = lightEntities;
@@ -50,7 +51,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LightEntityViewHol
             v.setActivated(!v.isActivated());
             new SetLightToAutomaticTask().execute(lightEntities.get(i));
         });
-        lightEntityViewHolder.settings.setOnClickListener(v -> Toast.makeText(v.getContext(), "Settings of " + lightEntities.get(i).getId() + " was pressed", Toast.LENGTH_SHORT).show());
+        lightEntityViewHolder.settings.setOnClickListener(v -> {
+            new SetLightToColorTask().execute(lightEntities.get(i));
+            Toast.makeText(v.getContext(), "Settings of " + lightEntities.get(i).getId() + " was pressed", Toast.LENGTH_SHORT).show();
+        });
         lightEntityViewHolder.off.setOnClickListener(v -> {
             new SetLightOffTask().execute(lightEntities.get(i));
         });
@@ -81,7 +85,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LightEntityViewHol
         }
     }
 
-    private class SetLightToAutomaticTask extends AsyncTask<LightEntity, Integer, Integer> {
+    private static class SetLightToAutomaticTask extends AsyncTask<LightEntity, Integer, Integer> {
 
         @Override
         protected Integer doInBackground(LightEntity... lightEntities) {
@@ -102,7 +106,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LightEntityViewHol
         }
     }
 
-    private class SetLightOffTask extends AsyncTask<LightEntity, Integer, Integer> {
+    private static class SetLightOffTask extends AsyncTask<LightEntity, Integer, Integer> {
 
         @Override
         protected Integer doInBackground(LightEntity... lightEntities) {
@@ -119,6 +123,28 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.LightEntityViewHol
 
         int sendRequest(String url) throws IOException {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            return connection.getResponseCode();
+        }
+    }
+
+    private static class SetLightToColorTask extends AsyncTask<LightEntity, Integer, Integer> {
+        @Override
+        protected Integer doInBackground(LightEntity... lightEntities) {
+            Integer status = null;
+            for (LightEntity lightEntity : lightEntities) {
+                try {
+                    status = sendRequest(lightEntity.getServer() + "/set/manual/" + lightEntity.getId());
+                } catch (IOException e) {
+                    Log.e("Network-Failure", "Unable to reach server " + lightEntity.getServer(), e);
+                }
+            }
+            return status;
+        }
+
+        private Integer sendRequest(String url) throws IOException {
+            HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestProperty("color", "red");
+            connection.setRequestProperty("brightness", "100");
             return connection.getResponseCode();
         }
     }
