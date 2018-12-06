@@ -13,20 +13,62 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/imageView"
+        <RelativeLayout
+            android:id="@+id/cardHeadingContainer"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_alignParentTop="true"
-            android:scaleType="centerCrop"
-            android:src="@drawable/lichterkette_demo" />
+            android:layout_height="120dp">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/lichterkette_demo"
+                android:visibility="visible" />
+
+
+            <RelativeLayout
+                android:id="@+id/settingsLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/chooseColorButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Choose color" />
+
+                <SeekBar
+                    android:id="@+id/seekBar3"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/chooseColorButton"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentBottom="true" />
+
+                <SeekBar
+                    android:id="@+id/seekBar4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/seekBar3" />
+
+                <SeekBar
+                    android:id="@+id/seekBar5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/seekBar4" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/info_text"
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/imageView"
+            android:layout_below="@id/cardHeadingContainer"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:text="Lichterkette - Kommode" />

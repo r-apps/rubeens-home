@@ -48,29 +48,18 @@ import me.rubeen.apps.android.rubeenshome.entities.LightEntity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView mTextMessage;
-
-    private AppCompatActivity activity;
-
-    private RelativeLayout settingsContainer;
-
-    private CardView cardView;
-
-    private RecyclerView recyclerView;
-
-    private List<LightEntity> lightEntities;
-
-    private NumberPicker portPicker;
-
-    private Button connectionToServerTestButton;
-
-    private Button downloadAllLightsFromServerButton;
-
-    private RVAdapter rvAdapter;
-
-    AutoCompleteTextView serverInput;
+    AutoCompleteTextView autoCompleteServerInput;
     ProgressBar progressBar;
-
+    private TextView mTextMessage;
+    private AppCompatActivity activity;
+    private RelativeLayout settingsContainer;
+    private CardView cardView;
+    private RecyclerView recyclerView;
+    private List<LightEntity> lightEntities;
+    private NumberPicker portPicker;
+    private Button connectionToServerTestButton;
+    private Button downloadAllLightsFromServerButton;
+    private RVAdapter rvAdapter;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -104,14 +93,14 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        serverInput = findViewById(R.id.input_search_server);
+        autoCompleteServerInput = findViewById(R.id.input_search_server);
         progressBar = findViewById(R.id.search_urlprogressBar);
         portPicker = findViewById(R.id.portPicker);
         initPortPicker();
 
         connectionToServerTestButton = findViewById(R.id.connectionToServerTest);
         connectionToServerTestButton.setOnClickListener(v -> {
-            String host = serverInput.getText().toString().trim();
+            String host = autoCompleteServerInput.getText().toString().trim();
             if (!host.startsWith("http://") || !host.startsWith("https://")) {
                 host = "http://" + host;
             }
@@ -121,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         downloadAllLightsFromServerButton = findViewById(R.id.downloadAllLightsFromServerBtn);
         downloadAllLightsFromServerButton.setOnClickListener(v -> {
-            String host = serverInput.getText().toString().trim();
+            String host = autoCompleteServerInput.getText().toString().trim();
             if (!host.startsWith("http://") || !host.startsWith("https://")) {
                 host = "http://" + host;
             }
@@ -129,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
             new DownloadAllLightsFromServerTask().execute(host);
         });
 
-        //new FindNetworkUrlsTask().execute("192.168.178");
+        new FindNetworkUrlsTask().execute("192.168.178");
 
         initLightEntityData();
         createRecyclerView(recyclerView);
@@ -172,6 +161,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class FindNetworkUrlsTask extends AsyncTask<String, Integer, List<String>> {
+
+        @Override
+        protected void onCancelled() {
+            progressBar.setVisibility(View.GONE);
+            autoCompleteServerInput.setHint(R.string.labelSearchServer);
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -196,6 +192,7 @@ public class MainActivity extends AppCompatActivity {
                 value += integer;
             }
             progressBar.setProgress(value);
+            autoCompleteServerInput.setHint("Scanning 192.168.178." + String.valueOf(value));
         }
 
         @Override
@@ -204,7 +201,8 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setVisibility(View.GONE);
             ArrayAdapter<String> arrayAdapter =
                     new ArrayAdapter<>(activity, android.R.layout.simple_dropdown_item_1line, strings);
-            serverInput.setAdapter(arrayAdapter);
+            autoCompleteServerInput.setAdapter(arrayAdapter);
+            autoCompleteServerInput.setHint(R.string.labelSearchServer);
         }
 
         private List<String> findAllUrlsInNetwork(String namespace, List<String> resultList) {
@@ -213,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     InetAddress inetAddress = InetAddress.getByName(ip);
                     System.out.println("checking " + ip + " now");
-                    if (inetAddress.isReachable(30)) {
+                    if (inetAddress.isReachable(5)) {
                         System.out.println("adding " + ip);
                         resultList.add(inetAddress.getHostName());
                     }

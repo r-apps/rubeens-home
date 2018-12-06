@@ -6,6 +6,9 @@ public class LightEntity {
     int id;
     boolean automaticActivated;
     String server;
+    int red;
+    int green;
+    int blue;
 
     public LightEntity(String name, String imageSrc, int id, boolean automaticActivated, String server) {
         this.name = name;
@@ -29,6 +32,37 @@ public class LightEntity {
 
     public boolean isAutomaticActivated() {
         return automaticActivated;
+    }
+
+    public void setRed(int red) {
+        this.red = red;
+    }
+
+    public void setGreen(int green) {
+        this.green = green;
+    }
+
+    public void setBlue(int blue) {
+        this.blue = blue;
+    }
+
+    public void setColor(int red, int green, int blue) {
+        this.red = red;
+        this.green = green;
+        this.blue = blue;
+    }
+
+    public int getRed() {
+
+        return red;
+    }
+
+    public int getGreen() {
+        return green;
+    }
+
+    public int getBlue() {
+        return blue;
     }
 
     public String getServer() {
