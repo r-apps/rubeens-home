@@ -40,6 +40,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import me.rubeen.apps.android.rubeenshome.adapter.RVAdapter;
@@ -118,7 +120,9 @@ public class MainActivity extends AppCompatActivity {
             new DownloadAllLightsFromServerTask().execute(host);
         });
 
-        new FindNetworkUrlsTask().execute("192.168.178");
+        autoCompleteServerInput.setText("raspberrypi.fritz.box");
+        new DownloadAllLightsFromServerTask().execute("http://raspberrypi.fritz.box:8080");
+        //new FindNetworkUrlsTask().execute("192.168.178");
 
         initLightEntityData();
         createRecyclerView(recyclerView);
